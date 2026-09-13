@@ -366,7 +366,7 @@ async def run_multi_accounts(config: BotConfig, target_account: str = None):
 
     all_results = []
     for idx, (label, session_b64) in enumerate(accounts, start=1):
-        log_step(f"BẮT ĐẦU TÀI KHOẢN [{idx}/{len(accounts)}]: {label}")
+        log_step(f"BẮT ĐẦU TÀI KHOẢN [{idx}/{len(accounts)}]: {config.account_labels.get(label, label)}")
         
         # Reset desktop profile directory and session.json for isolated clean run
         profile_dir = Path(__file__).resolve().parent / "browser_data" / "desktop_profile"
