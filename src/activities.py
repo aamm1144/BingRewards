@@ -154,15 +154,18 @@ class RewardsDashboard:
         # Fallback: try clicking any button with "claim" text (case-insensitive)
         try:
             fallback_btns = await container.query_selector_all("button, [role='button'], mee-button")
-            for btn in fallback_btns:
-                btn_text = (await btn.inner_text() or "").strip().lower()
-                if "claim" in btn_text and await btn.is_visible():
+            log_info(f"Found {len(fallback_btns)} fallback buttons to check")
+            for idx, btn in enumerate(fallback_btns):
+                btn_text = (await btn.inner_text() or "").strip()
+                btn_tag = await btn.evaluate("el => el.tagName")
+                log_info(f"  Button {idx}: tag={btn_tag} text='{btn_text[:80]}'")
+                if "claim" in btn_text.lower() and await btn.is_visible():
                     log_info(f"Fallback click nut Claim: '{btn_text}'")
                     await btn.click()
                     await asyncio.sleep(3)
                     break
-        except Exception:
-            pass
+        except Exception as e:
+            log_warn(f"Fallback claim click error: {e}")
 
         await self.close_any_drawer()
 
@@ -386,6 +389,10 @@ class RewardsDashboard:
                 title = next_card_info.get("title", "").strip()
                 href = next_card_info.get("href", "")
                 text_preview = next_card_info.get("text_preview", "")
+
+                # Debug: log all candidates with 'ready' keyword
+                if "ready" in text_preview.lower():
+                    log_info(f"[DEBUG] Found 'ready' candidate: '{text_preview[:150]}'")
 
                 # FIX #4: Dung ca title + href lam tracking key
                 tracking_key = f"{title}||{href}" if href else title
