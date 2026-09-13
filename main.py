@@ -368,7 +368,15 @@ async def run_multi_accounts(config: BotConfig, target_account: str = None):
 
     all_results = []
     for idx, (label, session_b64) in enumerate(accounts, start=1):
-        display_name = config.account_labels.get(label, label) if config.account_labels else label
+        # Resolve display name: env ACCOUNT_LABEL_{i} > config.account_labels > label
+        idx_num = label.replace("Account ", "").strip()
+        env_label = os.environ.get(f"ACCOUNT_LABEL_{idx_num}", "").strip()
+        if env_label:
+            display_name = env_label
+        elif config.account_labels:
+            display_name = config.account_labels.get(label, label)
+        else:
+            display_name = label
         log_step(f"BẮT ĐẦU TÀI KHOẢN [{idx}/{len(accounts)}]: {display_name}")
         
         # Reset desktop profile directory and session.json for isolated clean run

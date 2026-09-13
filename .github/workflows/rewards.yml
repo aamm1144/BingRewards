@@ -80,6 +80,12 @@ jobs:
           MICROSOFT_SESSION_6: ${{ secrets.MICROSOFT_SESSION_6 }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ACCOUNT_LABEL_1: ${{ secrets.ACCOUNT_LABEL_1 }}
+          ACCOUNT_LABEL_2: ${{ secrets.ACCOUNT_LABEL_2 }}
+          ACCOUNT_LABEL_3: ${{ secrets.ACCOUNT_LABEL_3 }}
+          ACCOUNT_LABEL_4: ${{ secrets.ACCOUNT_LABEL_4 }}
+          ACCOUNT_LABEL_5: ${{ secrets.ACCOUNT_LABEL_5 }}
+          ACCOUNT_LABEL_6: ${{ secrets.ACCOUNT_LABEL_6 }}
         run: |
           TARGET="${{ github.event.inputs.target_account || 'All' }}"
           if [ "$TARGET" = "All" ]; then
@@ -157,6 +163,12 @@ jobs:
           MICROSOFT_SESSION_6: ${{ secrets.MICROSOFT_SESSION_6 }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ACCOUNT_LABEL_1: ${{ secrets.ACCOUNT_LABEL_1 }}
+          ACCOUNT_LABEL_2: ${{ secrets.ACCOUNT_LABEL_2 }}
+          ACCOUNT_LABEL_3: ${{ secrets.ACCOUNT_LABEL_3 }}
+          ACCOUNT_LABEL_4: ${{ secrets.ACCOUNT_LABEL_4 }}
+          ACCOUNT_LABEL_5: ${{ secrets.ACCOUNT_LABEL_5 }}
+          ACCOUNT_LABEL_6: ${{ secrets.ACCOUNT_LABEL_6 }}
         run: |
           TARGET="${{ github.event.inputs.target_account || 'All' }}"
           if [ "$TARGET" = "All" ]; then

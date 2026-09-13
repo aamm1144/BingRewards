@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 import re
 import random
 from typing import Dict, List, Any, Set
@@ -443,8 +443,43 @@ class RewardsDashboard:
 
         log_info(f"=== Hoan tat: Tong so the da xu ly = {len(self.processed_titles)} ===")
 
+    async def claim_ready_points(self):
+        """Click 'Ready to claim' / 'Claim >' button on dashboard to collect pending points."""
+        try:
+            await self.open_dashboard("https://rewards.bing.com/dashboard")
+            await asyncio.sleep(2)
+            # Selector for the Claim button in the 'Ready to claim' card
+            claim_selectors = [
+                "a:has-text('Claim')",
+                "button:has-text('Claim')",
+                "[aria-label*='claim' i]",
+                "a[href*='claim']",
+            ]
+            claimed = False
+            for sel in claim_selectors:
+                btns = await self.page.query_selector_all(sel)
+                for btn in btns:
+                    try:
+                        if await btn.is_visible():
+                            txt = (await btn.inner_text()).strip()
+                            # Avoid clicking redeem/gift buttons, target Claim only
+                            if txt.lower() in ("claim", "claim >", "claim>") or "claim" in txt.lower() and "redeem" not in txt.lower():
+                                log_info(f"[Claim] Nhan nut: '{txt}'")
+                                await btn.click()
+                                await asyncio.sleep(3)
+                                claimed = True
+                    except Exception:
+                        pass
+            if not claimed:
+                log_info("[Claim] Khong tim thay nut 'Ready to claim' (co the da claim hoac chua co).")
+        except Exception as e:
+            log_warn(f"[Claim] Loi khi claim ready points: {e}")
+
     async def solve_all_activities(self):
         """Complete all tasks across Dashboard, Earn page, and Get Started onboarding."""
+        log_info("=== Phase 0: Claim Ready Points ===")
+        await self.claim_ready_points()
+
         log_info("=== Phase 1: Dashboard (Daily Set + Streaks + Activities) ===")
         await self.open_dashboard("https://rewards.bing.com/dashboard")
         await self.scan_and_solve_page_cards()
