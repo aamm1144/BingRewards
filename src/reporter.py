@@ -77,6 +77,7 @@ class AccountReporter:
             except Exception:
                 pass
 
+        history = cls.load_history()
         start_num = parse_pts(start_pts)
         end_num = parse_pts(end_pts)
         gained = max(0, end_num - start_num) if end_num > 0 and start_num > 0 else 0
@@ -95,16 +96,23 @@ class AccountReporter:
             "date": date_key
         }
 
-        history.append(entry)
-        
-        # Keep last 200 runs
-        if len(history) > 200:
-            history = history[-200:]
+        try:
+            history.append(entry)
 
-        with open(HISTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump(history, f, ensure_ascii=False, indent=2)
+            # Keep last 200 runs
+            if len(history) > 200:
+                history = history[-200:]
 
-        cls.generate_html_dashboard()
+            with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+                json.dump(history, f, ensure_ascii=False, indent=2)
+        except Exception as write_err:
+            from src.utils import log_warn
+            log_warn(f"Không thể ghi lịch sử: {write_err}")
+
+        try:
+            cls.generate_html_dashboard()
+        except Exception:
+            pass
         cls.sync_git()
 
     @classmethod

@@ -138,7 +138,10 @@ class BingSearcher:
                         pass
 
                     points = await self.get_current_points()
-                    log_info(f"[{i}/{len(words)}] Tìm kiếm: '{query}' | Điểm hiện tại: [bold green]{points}[/bold green]")
+                    if points != "N/A":
+                        log_info(f"[{i}/{len(words)}] Tìm kiếm: '{query}' | Điểm hiện tại: [bold green]{points}[/bold green]")
+                    else:
+                        log_info(f"[{i}/{len(words)}] Tìm kiếm: '{query}'")
 
                     # Batch cooldown (Microsoft occasionally restricts searches in short windows)
                     if self.config.search_cooldown_batch_size > 0 and i % self.config.search_cooldown_batch_size == 0 and i < len(words):
