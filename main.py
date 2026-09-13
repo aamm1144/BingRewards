@@ -232,7 +232,9 @@ async def run_full_bot(config: BotConfig, account_label: str = "") -> dict:
         return {"account": account_name, "start_points": str(start_points), "end_points": str(end_points), "gained": gained, "streak": str(streak), "status": "Thành công"}
 
     except Exception as e:
+        import traceback
         log_error(f"Đã xảy ra lỗi trong quá trình chạy {f'({account_label})' if account_label else ''}: {e}")
+        log_error(f"Traceback:\n{traceback.format_exc()}")
         from src.reporter import AccountReporter
         AccountReporter.log_account_run(account_name, start_points, end_points, streak=streak, status="Lỗi")
         from src.telegram_bot import TelegramNotifier
