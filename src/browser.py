@@ -50,7 +50,6 @@ class BrowserManager:
         # Restore storage state from env or file if running in CI/GitHub Actions
         session_env = os.environ.get("MICROSOFT_SESSION")
         session_file = Path(__file__).resolve().parent.parent / "session.json"
-        storage_param = None
 
         if not is_login:
             if session_env:
@@ -59,11 +58,8 @@ class BrowserManager:
                     decoded = base64.b64decode(session_env.strip()).decode("utf-8")
                     with open(session_file, "w", encoding="utf-8") as f:
                         f.write(decoded)
-                    storage_param = str(session_file)
                 except Exception as e:
                     log_warn(f"Không thể giải mã MICROSOFT_SESSION: {e}")
-            elif session_file.exists():
-                storage_param = str(session_file)
 
         if not self.playwright:
             self.playwright = await async_playwright().start()
