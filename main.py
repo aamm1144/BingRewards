@@ -366,7 +366,8 @@ async def run_multi_accounts(config: BotConfig, target_account: str = None):
 
     all_results = []
     for idx, (label, session_b64) in enumerate(accounts, start=1):
-        log_step(f"BẮT ĐẦU TÀI KHOẢN [{idx}/{len(accounts)}]: {config.account_labels.get(label, label)}")
+        display_name = config.account_labels.get(label, label) if config.account_labels else label
+        log_step(f"BẮT ĐẦU TÀI KHOẢN [{idx}/{len(accounts)}]: {display_name}")
         
         # Reset desktop profile directory and session.json for isolated clean run
         profile_dir = Path(__file__).resolve().parent / "browser_data" / "desktop_profile"
@@ -385,8 +386,6 @@ async def run_multi_accounts(config: BotConfig, target_account: str = None):
 
         # Set session for this specific account
         os.environ["MICROSOFT_SESSION"] = session_b64
-
-        display_name = config.account_labels.get(label, label) if (config.account_labels and label in config.account_labels) else label
         res = None
         try:
             res = await run_full_bot(config, account_label=display_name)

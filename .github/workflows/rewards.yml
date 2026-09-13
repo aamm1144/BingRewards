@@ -37,7 +37,7 @@ jobs:
   # Flow 1: Account 1, 2, 3
   flow-1:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 210
     if: >-
       ${{
         github.event_name == 'schedule' && (github.event.schedule == '30 17 * * *' || github.event.schedule == '30 5 * * *') ||
@@ -107,15 +107,22 @@ jobs:
   # Flow 2: Account 4, 5, 6
   flow-2:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 210
+    # Khi dispatch thủ công với All: chờ flow-1 xong mới chạy (tuần tự)
+    # Khi dispatch chọn Account 4/5/6 riêng lẻ: chạy ngay không cần chờ
+    # Khi schedule: 2 flow hoạt động độc lập theo lịch riêng
+    needs: [flow-1]
     if: >-
       ${{
-        github.event_name == 'schedule' && (github.event.schedule == '30 20 * * *' || github.event.schedule == '30 8 * * *') ||
-        github.event_name == 'workflow_dispatch' && (
-          github.event.inputs.target_account == 'All' ||
-          github.event.inputs.target_account == 'Account 4' ||
-          github.event.inputs.target_account == 'Account 5' ||
-          github.event.inputs.target_account == 'Account 6'
+        always() &&
+        (
+          github.event_name == 'schedule' && (github.event.schedule == '30 20 * * *' || github.event.schedule == '30 8 * * *') ||
+          github.event_name == 'workflow_dispatch' && (
+            github.event.inputs.target_account == 'All' ||
+            github.event.inputs.target_account == 'Account 4' ||
+            github.event.inputs.target_account == 'Account 5' ||
+            github.event.inputs.target_account == 'Account 6'
+          )
         )
       }}
 
