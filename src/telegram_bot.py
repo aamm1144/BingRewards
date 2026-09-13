@@ -7,10 +7,18 @@ class TelegramNotifier:
     """Sends notifications to Telegram channel or direct chat."""
 
     def __init__(self, token: Optional[str] = None, chat_id: Optional[str] = None):
-        from src.config import BotConfig
-        cfg = BotConfig.load()
-        self.token = token or os.environ.get("TELEGRAM_BOT_TOKEN") or getattr(cfg, "telegram_bot_token", None)
-        self.chat_id = chat_id or os.environ.get("TELEGRAM_CHAT_ID") or getattr(cfg, "telegram_chat_id", None)
+        # Ưu tiên: tham số truyền vào → env var → fallback đọc config.json
+        self.token = token or os.environ.get("TELEGRAM_BOT_TOKEN")
+        self.chat_id = chat_id or os.environ.get("TELEGRAM_CHAT_ID")
+        # Chỉ load BotConfig từ disk khi cả env var đều thiếu (tránh đọc file thừa)
+        if not self.token or not self.chat_id:
+            try:
+                from src.config import BotConfig
+                cfg = BotConfig.load()
+                self.token = self.token or getattr(cfg, "telegram_bot_token", None)
+                self.chat_id = self.chat_id or getattr(cfg, "telegram_chat_id", None)
+            except Exception:
+                pass
 
     @property
     def is_configured(self) -> bool:
