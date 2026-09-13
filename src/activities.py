@@ -131,6 +131,15 @@ class RewardsDashboard:
         ]
         drawer = await self.page.query_selector("[role='dialog'], [aria-modal='true'], [class*='drawer'], [class*='flyout'], [class*='Drawer']")
         container = drawer if drawer else self.page
+
+        # Log drawer content for debugging
+        try:
+            drawer_text = await container.inner_text()
+            if drawer_text:
+                log_info(f"Drawer content: {drawer_text[:200]}")
+        except Exception:
+            pass
+
         for action_name, sel in action_selectors:
             btn = await container.query_selector(sel)
             if btn and await btn.is_visible():
@@ -141,6 +150,20 @@ class RewardsDashboard:
                 except Exception:
                     pass
                 break
+
+        # Fallback: try clicking any button with "claim" text (case-insensitive)
+        try:
+            fallback_btns = await container.query_selector_all("button, [role='button'], mee-button")
+            for btn in fallback_btns:
+                btn_text = (await btn.inner_text() or "").strip().lower()
+                if "claim" in btn_text and await btn.is_visible():
+                    log_info(f"Fallback click nut Claim: '{btn_text}'")
+                    await btn.click()
+                    await asyncio.sleep(3)
+                    break
+        except Exception:
+            pass
+
         await self.close_any_drawer()
 
     async def _expand_all_accordions(self):
