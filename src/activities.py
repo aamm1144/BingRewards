@@ -317,11 +317,14 @@ class RewardsDashboard:
                                              /\b\d+\s*(pts|points)\b/i.test(text) ||
                                              /\(\+\d+\)/i.test(text);
 
+                            // CHAP NHAN "Ready to claim" keyword
+                            const isReadyToClaim = lowerText.includes('ready to claim');
+
                             // Hoac la card co link den Bing/Microsoft (Daily Set, quiz, poll)
                             const activityLink = el.querySelector("a[href*='bing.com'], a[href*='rewards.bing'], a[href*='microsoft.com']");
                             const hasBingLink = activityLink !== null;
 
-                            if (!hasPoints && !hasBingLink) continue;
+                            if (!hasPoints && !hasBingLink && !isReadyToClaim) continue;
 
                             // Tranh wrapper chua nhieu card con
                             let isParent = false;
