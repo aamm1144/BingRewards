@@ -209,6 +209,23 @@ async def run_full_bot(config: BotConfig, account_label: str = "") -> dict:
             end_points = end_summary.get("points", "N/A")
             streak = end_summary.get("streak", streak)
 
+        # Retry up to 2 times if end_points is N/A
+        if end_points == "N/A":
+            import asyncio as _asyncio
+            for _retry in range(2):
+                await _asyncio.sleep(5)
+                if await dash_final.open_dashboard("https://rewards.bing.com/dashboard"):
+                    _s = await dash_final.get_account_summary()
+                    _p = _s.get("points", "N/A")
+                    if _p != "N/A":
+                        end_points = _p
+                        streak = _s.get("streak", streak)
+                        break
+        # Last fallback: keep start_points to avoid N/A in history
+        if end_points == "N/A" and start_points != "N/A":
+            log_warn("Khong doc duoc diem cuoi, dung lai diem ban dau de ghi history.")
+            end_points = start_points
+
         table = Table(title=f"Kết Quả Microsoft Rewards {f'[{account_label}]' if account_label else ''}", style="cyan")
         table.add_column("Mục", style="bold white")
         table.add_column("Chi tiết", style="bold yellow")
