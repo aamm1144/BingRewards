@@ -178,6 +178,7 @@ class AccountReporter:
 
         # Build account number mapping from config order
         acc_num_map = {}
+        account_label_map = {}  # "Account N" or email -> canonical email
         try:
             from src.config import BotConfig
             cfg = BotConfig.load()
@@ -185,8 +186,30 @@ class AccountReporter:
                 for i, (label, email) in enumerate(cfg.account_labels.items(), start=1):
                     acc_num_map[email] = i
                     acc_num_map[email.split("@")[0]] = i
+                    account_label_map[label] = email  # "Account 1" -> email
+                    account_label_map[email] = email
         except Exception:
             pass
+
+        # Fallback: read ACCOUNT_LABEL_N env vars (used on GitHub Actions)
+        if not account_label_map:
+            import os
+            for i in range(1, 11):
+                env_email = os.environ.get(f"ACCOUNT_LABEL_{i}", "").strip()
+                if env_email:
+                    label = f"Account {i}"
+                    account_label_map[label] = env_email
+                    account_label_map[env_email] = env_email
+                    acc_num_map[env_email] = i
+                    acc_num_map[env_email.split("@")[0]] = i
+
+        # Normalize history entries: replace "Account N" labels with emails
+        if account_label_map:
+            for item in history:
+                acc = item.get("account", "")
+                if acc in account_label_map:
+                    item["account"] = account_label_map[acc]
+
 
         history_json = json.dumps(history, ensure_ascii=False)
         latest_json = json.dumps(latest_accounts, ensure_ascii=False)
