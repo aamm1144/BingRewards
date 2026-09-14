@@ -120,6 +120,19 @@ class RewardsDashboard:
     async def handle_drawer_actions(self):
         """Perform actions inside opened side drawer."""
         await asyncio.sleep(1.5)
+
+        # Skip drawers that are just info/membership pages, not actionable tasks
+        try:
+            drawer_text = await self.page.inner_text("[role='dialog'], [aria-modal='true'], [class*='drawer'], [class*='flyout'], [class*='Drawer']")
+            if drawer_text:
+                skip_keywords = ["your membership", "earn points by completing", "gold benefits", "how it works", "benefits", "search and earn"]
+                if any(k in drawer_text.lower() for k in skip_keywords):
+                    log_info("Drawer la trang info/thuong, dong lai...")
+                    await self.close_any_drawer()
+                    return
+        except Exception:
+            pass
+
         action_selectors = [
             ("Check-in now", "button:has-text('Check-in now'), button:has-text('Check-in'), button:has-text('Diem danh')"),
             ("Activate streak", "button:has-text('Activate streak'), button:has-text('Activate'), button:has-text('Kich hoat')"),
@@ -131,14 +144,6 @@ class RewardsDashboard:
         ]
         drawer = await self.page.query_selector("[role='dialog'], [aria-modal='true'], [class*='drawer'], [class*='flyout'], [class*='Drawer']")
         container = drawer if drawer else self.page
-
-        # Log drawer content for debugging
-        try:
-            drawer_text = await container.inner_text()
-            if drawer_text:
-                log_info(f"Drawer content: {drawer_text[:200]}")
-        except Exception:
-            pass
 
         for action_name, sel in action_selectors:
             btn = await container.query_selector(sel)
@@ -297,7 +302,8 @@ class RewardsDashboard:
                                 lowerText.includes('unlocks in') ||
                                 lowerText.includes('mo khoa ngay mai') ||
                                 lowerText.includes('level required') ||
-                                lowerText.includes('cap do yeu cau')) {
+                                lowerText.includes('cap do yeu cau') ||
+                                lowerText.includes('set a goal')) {
                                 el.setAttribute("data-reward-done", "true");
                                 continue;
                             }
@@ -448,7 +454,6 @@ class RewardsDashboard:
         try:
             await self.open_dashboard("https://rewards.bing.com/dashboard")
             await asyncio.sleep(2)
-            # Selector for the Claim button in the 'Ready to claim' card
             claim_selectors = [
                 "a:has-text('Claim')",
                 "button:has-text('Claim')",
@@ -462,12 +467,18 @@ class RewardsDashboard:
                     try:
                         if await btn.is_visible():
                             txt = (await btn.inner_text()).strip()
-                            # Avoid clicking redeem/gift buttons, target Claim only
                             if txt.lower() in ("claim", "claim >", "claim>") or "claim" in txt.lower() and "redeem" not in txt.lower():
                                 log_info(f"[Claim] Nhan nut: '{txt}'")
                                 await btn.click()
                                 await asyncio.sleep(3)
                                 claimed = True
+                                # Mark the parent card as done so scan_and_solve_page_cards skips it
+                                await self.page.evaluate(
+                                    """() => {
+                                        const card = document.querySelector('[data-reward-next="true"]');
+                                        if (card) { card.removeAttribute('data-reward-next'); card.setAttribute('data-reward-done', 'true'); }
+                                    }"""
+                                )
                     except Exception:
                         pass
             if not claimed:

@@ -28,6 +28,10 @@ class UrlRewardHandler:
         r'setGoal["\']?\s*:\s*["\']([a-f0-9]{40})',
         r'completeOffer["\']?\s*:\s*["\']([a-f0-9]{40})',
         r'["\']([a-f0-9]{40})["\']\s*[,\s]*reportActivity',
+        r'"actionId"\s*:\s*["\']([^"\']+)["\']',
+        r'"serverActionId"\s*:\s*["\']([^"\']+)["\']',
+        r'actionId["\']?\s*:\s*["\']([a-f0-9]{8,64})',
+        r'\[\"([a-f0-9]{8,64})\"\]',
     ]
 
     def __init__(self, page: Page):
@@ -262,16 +266,23 @@ class UrlRewardHandler:
     async def complete_offer(self, offer: dict) -> bool:
         """POST server action to mark urlreward offer complete."""
         if not self.action_id:
+            log_warn("complete_offer: no action_id, skipping")
+            return False
+
+        offer_id = offer.get("offerId")
+        offer_hash = offer.get("hash", "")
+        if not offer_id:
+            log_warn(f"complete_offer: missing offerId for '{offer.get('title', 'unknown')}'")
             return False
 
         try:
             tz_offset = int(-datetime.now().astimezone().utcoffset().total_seconds() / 60)
 
             body = json.dumps([
-                offer.get("hash", ""),
+                offer_hash,
                 11,
                 {
-                    "offerid": offer.get("offerId"),
+                    "offerid": offer_id,
                     "isPromotional": True,
                     "timezoneOffset": tz_offset,
                 },
@@ -293,7 +304,10 @@ class UrlRewardHandler:
                 data=body,
                 timeout=15000,
             )
-            return resp.status == 200
+            success = resp.status == 200
+            if not success:
+                log_warn(f"complete_offer: HTTP {resp.status} for {offer.get('title', '?')}")
+            return success
 
         except Exception as e:
             log_warn(f"complete_offer error: {e}")
