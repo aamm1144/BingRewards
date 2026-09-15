@@ -83,13 +83,30 @@ jobs:
           ACCOUNT_LABEL_5: ${{ secrets.ACCOUNT_LABEL_5 }}
           ACCOUNT_LABEL_6: ${{ secrets.ACCOUNT_LABEL_6 }}
         run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          sync_dashboard() {
+            python -c "from src.reporter import AccountReporter; AccountReporter.generate_html_dashboard()"
+            git add data/accounts_history.json dashboard.html index.html
+            git diff --quiet && git diff --staged --quiet || {
+              git commit -m "chore(stats): auto sync rewards dashboard [skip ci]"
+              for i in {1..5}; do
+                git pull --rebase -X ours origin main && git push origin main && break || sleep 5
+              done
+            }
+          }
+
           TARGET="${{ github.event.inputs.target_account || 'All' }}"
           if [ "$TARGET" = "All" ]; then
             python main.py --all --headless --account "Account 1"
+            sync_dashboard || true
             python main.py --all --headless --account "Account 2"
+            sync_dashboard || true
             python main.py --all --headless --account "Account 3"
+            sync_dashboard || true
           else
             python main.py --all --headless --account "$TARGET"
+            sync_dashboard || true
           fi
 
       - name: Commit and Push Dashboard History
@@ -166,13 +183,30 @@ jobs:
           ACCOUNT_LABEL_5: ${{ secrets.ACCOUNT_LABEL_5 }}
           ACCOUNT_LABEL_6: ${{ secrets.ACCOUNT_LABEL_6 }}
         run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          sync_dashboard() {
+            python -c "from src.reporter import AccountReporter; AccountReporter.generate_html_dashboard()"
+            git add data/accounts_history.json dashboard.html index.html
+            git diff --quiet && git diff --staged --quiet || {
+              git commit -m "chore(stats): auto sync rewards dashboard [skip ci]"
+              for i in {1..5}; do
+                git pull --rebase -X ours origin main && git push origin main && break || sleep 5
+              done
+            }
+          }
+
           TARGET="${{ github.event.inputs.target_account || 'All' }}"
           if [ "$TARGET" = "All" ]; then
             python main.py --all --headless --account "Account 4"
+            sync_dashboard || true
             python main.py --all --headless --account "Account 5"
+            sync_dashboard || true
             python main.py --all --headless --account "Account 6"
+            sync_dashboard || true
           else
             python main.py --all --headless --account "$TARGET"
+            sync_dashboard || true
           fi
 
       - name: Commit and Push Dashboard History
