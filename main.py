@@ -156,6 +156,11 @@ async def run_full_bot(config: BotConfig, account_label: str = "") -> dict:
         summary = await dashboard.get_account_summary()
         start_points = summary.get("points", "N/A")
         streak = summary.get("streak", "0")
+        detected_email = summary.get("email", "")
+        if detected_email and (not account_label or account_label.startswith("Account ") or account_label == "Local Account"):
+            log_info(f"Phát hiện email tài khoản từ trang Rewards: [bold cyan]{detected_email}[/bold cyan]")
+            account_name = detected_email
+            account_label = detected_email
         log_info(f"Số điểm ban đầu: [bold green]{start_points}[/bold green] (Chuỗi: {streak} ngày)")
 
         # 1. Daily Set & Activities
@@ -208,6 +213,11 @@ async def run_full_bot(config: BotConfig, account_label: str = "") -> dict:
             end_summary = await dash_final.get_account_summary()
             end_points = end_summary.get("points", "N/A")
             streak = end_summary.get("streak", streak)
+            if not detected_email and end_summary.get("email"):
+                detected_email = end_summary.get("email")
+                if not account_label or account_label.startswith("Account ") or account_label == "Local Account":
+                    account_name = detected_email
+                    account_label = detected_email
 
         # Retry up to 2 times if end_points is N/A
         if end_points == "N/A":

@@ -39,8 +39,10 @@ class BotConfig:
                     with open(EXAMPLE_CONFIG_PATH, "r", encoding="utf-8") as f:
                         ex_data = json.load(f)
                     for k, v in ex_data.items():
-                        if k in cls.__dataclass_fields__ and not str(getattr(default_conf, k, "")):
-                            setattr(default_conf, k, v)
+                        if k in cls.__dataclass_fields__:
+                            curr_val = getattr(default_conf, k, None)
+                            if curr_val is None or curr_val == "" or curr_val == {}:
+                                setattr(default_conf, k, v)
                 except Exception:
                     pass
             default_conf.save()
@@ -59,8 +61,10 @@ class BotConfig:
                 with open(EXAMPLE_CONFIG_PATH, "r", encoding="utf-8") as f:
                     ex_data = json.load(f)
                 for k, v in ex_data.items():
-                    if k in cls.__dataclass_fields__ and not str(getattr(conf, k, "")):
-                        setattr(conf, k, v)
+                    if k in cls.__dataclass_fields__:
+                        curr_val = getattr(conf, k, None)
+                        if curr_val is None or curr_val == "" or curr_val == {}:
+                            setattr(conf, k, v)
             except Exception:
                 pass
 

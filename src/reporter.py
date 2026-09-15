@@ -65,14 +65,14 @@ class AccountReporter:
             except Exception:
                 pass
 
-        # Map "Local Account" to the first configured email if possible
+        # Only map "Local Account" if exactly 1 account is configured in labels
         if account_label == "Local Account" and CONFIG_PATH.exists():
             try:
                 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 labels = data.get("account_labels", {})
-                if labels:
-                    # Use the first email in the mapping
+                if len(labels) == 1:
+                    # Use the single configured email
                     account_label = next(iter(labels.values()))
             except Exception:
                 pass

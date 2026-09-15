@@ -94,6 +94,29 @@ class RewardsDashboard:
                     if m_streak:
                         summary["streak"] = m_streak.group(0)
 
+            email_data = await self.page.evaluate(r"""
+                () => {
+                    const sel = '#mectrl_currentAccount_secondary, [data-testid*="email"], .identity-email, #id_a, #b_idProviders';
+                    const el = document.querySelector(sel);
+                    if (el && el.innerText && el.innerText.includes('@')) {
+                        return el.innerText.trim();
+                    }
+                    const ariaEls = document.querySelectorAll('[aria-label*="@"], [title*="@"]');
+                    for (const e of ariaEls) {
+                        const val = e.getAttribute('aria-label') || e.getAttribute('title') || '';
+                        const m = val.match(/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/);
+                        if (m) return m[0];
+                    }
+                    if (document.body) {
+                        const m = document.body.innerText.match(/[a-zA-Z0-9_.+-]+@(gmail|outlook|hotmail|live|yahoo|msn|microsoft)\.[a-zA-Z0-9-.]+/i);
+                        if (m) return m[0];
+                    }
+                    return null;
+                }
+            """)
+            if email_data:
+                summary["email"] = email_data
+
         except Exception:
             pass
         return summary
