@@ -568,17 +568,17 @@
         <div class="stats-grid">
             <div class="stat-card c-blue">
                 <div class="stat-label">Tổng Điểm</div>
-                <div class="stat-value">100</div>
+                <div class="stat-value">450</div>
                 <div class="stat-sub">💎 Tích lũy khả dụng</div>
             </div>
             <div class="stat-card c-green">
                 <div class="stat-label">Hôm Nay</div>
-                <div class="stat-value" id="todayGainedStat">+279</div>
+                <div class="stat-value" id="todayGainedStat">+30</div>
                 <div class="stat-sub">🚀 Điểm mới cày</div>
             </div>
             <div class="stat-card c-purple">
                 <div class="stat-label">Tài Khoản</div>
-                <div class="stat-value">7</div>
+                <div class="stat-value">8</div>
                 <div class="stat-sub">👥 Đang hoạt động</div>
             </div>
             <div class="stat-card c-yellow">
@@ -602,7 +602,7 @@
         <!-- 2. Compact Account Rows (Collapsed / Minimized by Default) -->
         <div class="section-header" style="cursor: pointer; user-select: none;" onclick="toggleAccounts()">
             <div class="section-title">
-                <span>👤 Trạng Thái Tài Khoản (7)</span>
+                <span>👤 Trạng Thái Tài Khoản (8)</span>
                 <svg class="chevron" id="accChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
             <button class="btn-toggle-all" id="toggleAccsBtn" onclick="event.stopPropagation(); toggleAccounts();">Mở rộng</button>
@@ -633,8 +633,8 @@
     </div>
 
     <script>
-        const historyData = [{"account": "nyeinealcosbuho@outlook.com", "start_points": "N/A", "end_points": "100", "gained": 0, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 04:15:24", "date": "16/09/2026"}];
-        const latestAccounts = {"vudinhnambr@gmail.com": {"account": "vudinhnambr@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambrvt@gmail.com": {"account": "vudinhnambrvt@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambr1@gmail.com": {"account": "vudinhnambr1@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambr2@gmail.com": {"account": "vudinhnambr2@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambr3@gmail.com": {"account": "vudinhnambr3@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "csb.qaqc@gmail.com": {"account": "csb.qaqc@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "nyeinealcosbuho@outlook.com": {"account": "nyeinealcosbuho@outlook.com", "start_points": "N/A", "end_points": "100", "gained": 0, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 04:15:24", "date": "16/09/2026"}};
+        const historyData = [{"account": "nyeinealcosbuho@outlook.com", "start_points": "N/A", "end_points": "100", "gained": 0, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 04:15:24", "date": "16/09/2026"}, {"account": "vudinhnambr3@gmail.com", "start_points": "0", "end_points": "110", "gained": 0, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 05:03:16", "date": "16/09/2026"}, {"account": "csb.qaqc@gmail.com", "start_points": "100", "end_points": "115", "gained": 15, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 06:01:14", "date": "16/09/2026"}, {"account": "marjewforrovo@outlook.com", "start_points": "110", "end_points": "125", "gained": 15, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 07:18:04", "date": "16/09/2026"}];
+        const latestAccounts = {"vudinhnambr@gmail.com": {"account": "vudinhnambr@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambrvt@gmail.com": {"account": "vudinhnambrvt@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambr1@gmail.com": {"account": "vudinhnambr1@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambr2@gmail.com": {"account": "vudinhnambr2@gmail.com", "start_points": "0", "end_points": "0", "gained": 0, "streak": "0", "status": "Chờ chạy", "timestamp": "Chưa có lượt chạy", "date": ""}, "vudinhnambr3@gmail.com": {"account": "vudinhnambr3@gmail.com", "start_points": "0", "end_points": "110", "gained": 0, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 05:03:16", "date": "16/09/2026"}, "csb.qaqc@gmail.com": {"account": "csb.qaqc@gmail.com", "start_points": "100", "end_points": "115", "gained": 15, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 06:01:14", "date": "16/09/2026"}, "nyeinealcosbuho@outlook.com": {"account": "nyeinealcosbuho@outlook.com", "start_points": "N/A", "end_points": "100", "gained": 0, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 04:15:24", "date": "16/09/2026"}, "marjewforrovo@outlook.com": {"account": "marjewforrovo@outlook.com", "start_points": "110", "end_points": "125", "gained": 15, "streak": "0", "status": "Thành công", "timestamp": "16/09/2026 07:18:04", "date": "16/09/2026"}};
         const accNumMap = {"vudinhnambr@gmail.com": 1, "vudinhnambr": 1, "vudinhnambrvt@gmail.com": 2, "vudinhnambrvt": 2, "vudinhnambr1@gmail.com": 3, "vudinhnambr1": 3, "vudinhnambr2@gmail.com": 4, "vudinhnambr2": 4, "vudinhnambr3@gmail.com": 5, "vudinhnambr3": 5, "csb.qaqc@gmail.com": 6, "csb.qaqc": 6};
 
         // Register ChartDataLabels plugin
