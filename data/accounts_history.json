@@ -168,5 +168,15 @@
     "status": "Thành công",
     "timestamp": "20/09/2026 04:33:23",
     "date": "20/09/2026"
+  },
+  {
+    "account": "elmeslstobbtbae@outlook.com",
+    "start_points": "285",
+    "end_points": "335",
+    "gained": 50,
+    "streak": "0",
+    "status": "Thành công",
+    "timestamp": "20/09/2026 05:34:03",
+    "date": "20/09/2026"
   }
 ]
