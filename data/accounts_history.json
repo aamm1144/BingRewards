@@ -178,5 +178,15 @@
     "status": "Thành công",
     "timestamp": "20/09/2026 05:34:03",
     "date": "20/09/2026"
+  },
+  {
+    "account": "kanoyesprayut@outlook.com",
+    "start_points": "365",
+    "end_points": "425",
+    "gained": 60,
+    "streak": "0",
+    "status": "Thành công",
+    "timestamp": "21/09/2026 03:43:00",
+    "date": "21/09/2026"
   }
 ]
