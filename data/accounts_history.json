@@ -608,5 +608,15 @@
     "status": "Thành công",
     "timestamp": "29/09/2026 06:01:26",
     "date": "29/09/2026"
+  },
+  {
+    "account": "sagarzangloafq@outlook.com",
+    "start_points": "1,550",
+    "end_points": "1,600",
+    "gained": 50,
+    "streak": "0",
+    "status": "Thành công",
+    "timestamp": "29/09/2026 07:05:20",
+    "date": "29/09/2026"
   }
 ]
