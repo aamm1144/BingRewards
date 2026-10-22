@@ -1,15 +1,5 @@
 [
   {
-    "account": "csb.qaqc@gmail.com",
-    "start_points": "100",
-    "end_points": "115",
-    "gained": 15,
-    "streak": "0",
-    "status": "Thành công",
-    "timestamp": "16/09/2026 06:01:14",
-    "date": "16/09/2026"
-  },
-  {
     "account": "marjewforrovo@outlook.com",
     "start_points": "110",
     "end_points": "125",
@@ -1997,6 +1987,16 @@
     "streak": "0",
     "status": "Thành công",
     "timestamp": "23/10/2026 04:10:53",
+    "date": "23/10/2026"
+  },
+  {
+    "account": "sagarzangloafq@outlook.com",
+    "start_points": "N/A",
+    "end_points": "N/A",
+    "gained": 0,
+    "streak": "0",
+    "status": "Thành công",
+    "timestamp": "23/10/2026 04:37:32",
     "date": "23/10/2026"
   }
 ]
