@@ -1,15 +1,5 @@
 [
   {
-    "account": "elmeslstobbtbae@outlook.com",
-    "start_points": "285",
-    "end_points": "335",
-    "gained": 50,
-    "streak": "0",
-    "status": "Thành công",
-    "timestamp": "20/09/2026 05:34:03",
-    "date": "20/09/2026"
-  },
-  {
     "account": "kanoyesprayut@outlook.com",
     "start_points": "365",
     "end_points": "425",
@@ -1997,6 +1987,16 @@
     "streak": "0",
     "status": "Thành công",
     "timestamp": "25/10/2026 06:16:08",
+    "date": "25/10/2026"
+  },
+  {
+    "account": "ekissdtuzzorzes@outlook.com",
+    "start_points": "N/A",
+    "end_points": "N/A",
+    "gained": 0,
+    "streak": "0",
+    "status": "Thành công",
+    "timestamp": "25/10/2026 06:43:06",
     "date": "25/10/2026"
   }
 ]
